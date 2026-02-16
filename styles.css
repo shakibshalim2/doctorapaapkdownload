@@ -250,9 +250,9 @@ input, textarea {
 }
 
 .loader-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto var(--spacing-lg);
+    width: 120px;
+    height: 120px;
+    margin: 0 auto var(--spacing-xl);
     animation: pulse 1.5s ease-in-out infinite;
 }
 
@@ -260,14 +260,7 @@ input, textarea {
     width: 100%;
     height: 100%;
     object-fit: contain;
-}
-
-.loader-text {
-    font-family: var(--font-primary);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: var(--spacing-lg);
+    border-radius: var(--radius-lg);
 }
 
 .loader-bar {
@@ -329,16 +322,19 @@ input, textarea {
 }
 
 .logo img {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: var(--radius-md);
+    object-fit: cover;
+    transition: var(--transition-fast);
+}
+
+.logo img:hover {
+    transform: scale(1.05);
 }
 
 .logo span {
-    font-family: var(--font-primary);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary-dark);
+    display: none; /* Hidden - logo only */
 }
 
 .nav-links {
@@ -860,6 +856,7 @@ input, textarea {
     border-radius: 50%;
     border: 4px solid var(--white);
     box-shadow: var(--shadow-md);
+    object-fit: cover;
 }
 
 .online-indicator {
@@ -1917,6 +1914,7 @@ input, textarea {
     width: 45px;
     height: 45px;
     border-radius: var(--radius-md);
+    object-fit: cover;
 }
 
 .footer-logo span {
