@@ -88,6 +88,8 @@
 html {
     scroll-behavior: smooth;
     font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -97,6 +99,8 @@ body {
     color: var(--dark);
     background-color: var(--white);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -114,6 +118,9 @@ h4 { font-size: clamp(1.125rem, 2.5vw, 1.25rem); }
 p {
     margin-bottom: var(--spacing-md);
     color: var(--gray);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 a {
@@ -122,10 +129,29 @@ a {
     transition: var(--transition-normal);
 }
 
+h1, h2, h3, h4, h5, h6, p, span, div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 img {
     max-width: 100%;
     height: auto;
     display: block;
+}
+
+svg, video, iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Prevent content from causing horizontal scroll */
+* {
+    max-width: 100%;
+}
+
+html {
+    overflow-x: hidden;
 }
 
 ul, ol {
@@ -143,6 +169,24 @@ input, textarea {
     font-family: inherit;
     border: none;
     outline: none;
+}
+
+input, textarea, select, button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent text size adjustment on mobile */
+input, textarea, select {
+    font-size: 16px;
+}
+
+/* Touch action for better mobile interaction */
+button, a, .btn {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* =====================================================
@@ -224,29 +268,40 @@ input, textarea {
 }
 
 /* =====================================================
-   4. PRELOADER
+   4. PRELOADER - FIXED FOR MOBILE CENTERING
    ===================================================== */
 #preloader {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
     background: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     z-index: 9999;
     transition: opacity 0.5s ease, visibility 0.5s ease;
+    overflow: hidden;
 }
 
 #preloader.hidden {
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
 }
 
 .loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    width: 100%;
+    max-width: 350px;
+    padding: var(--spacing-xl);
 }
 
 .loader-icon {
@@ -254,6 +309,9 @@ input, textarea {
     height: 250px;
     margin: 0 auto var(--spacing-3xl);
     animation: pulse 1.5s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .loader-icon img {
@@ -265,6 +323,7 @@ input, textarea {
 
 .loader-bar {
     width: 300px;
+    max-width: 90vw;
     height: 6px;
     background: var(--light-gray);
     border-radius: var(--radius-full);
@@ -323,12 +382,14 @@ input, textarea {
 }
 
 .logo img {
-    width: 70px;
-    height: 70px;
+    width: 80px;
+    height: 80px;
     border-radius: var(--radius-lg);
-    object-fit: cover;
+    object-fit: contain;
     transition: var(--transition-fast);
     box-shadow: 0 2px 8px rgba(200, 159, 163, 0.15);
+    padding: 4px;
+    background: white;
 }
 
 .logo img:hover {
@@ -2543,6 +2604,7 @@ input, textarea {
     gap: var(--spacing-sm);
     max-width: 480px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .newsletter-input {
@@ -2556,6 +2618,7 @@ input, textarea {
     outline: none;
     transition: var(--transition-normal);
     backdrop-filter: blur(4px);
+    min-height: 48px;
 }
 
 .newsletter-input::placeholder {
@@ -2573,6 +2636,10 @@ input, textarea {
     padding: var(--spacing-md) var(--spacing-xl);
     border: none;
     white-space: nowrap;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .newsletter-btn:hover {
@@ -2745,6 +2812,16 @@ input, textarea {
 
 /* Mobile Landscape */
 @media (max-width: 768px) {
+    /* Container spacing */
+    .container {
+        padding: 0 var(--spacing-lg);
+    }
+    
+    section {
+        padding: var(--spacing-3xl) 0;
+    }
+    
+    /* Navigation improvements */
     .nav-links {
         position: fixed;
         top: 0;
@@ -2760,78 +2837,193 @@ input, textarea {
         box-shadow: var(--shadow-2xl);
         transition: var(--transition-normal);
         z-index: var(--z-modal);
+        padding: var(--spacing-2xl);
     }
     
     .nav-links.active {
         right: 0;
     }
     
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-links a {
+        display: block;
+        padding: var(--spacing-md);
+        font-size: 1.125rem;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
     .nav-toggle {
         display: flex;
         z-index: calc(var(--z-modal) + 1);
+        width: 44px;
+        height: 44px;
+        padding: var(--spacing-sm);
     }
     
+    .nav-toggle span {
+        height: 3px;
+    }
+    
+    /* Logo adjustments */
+    .logo img {
+        max-height: 50px;
+        width: auto;
+    }
+    
+    /* Hero section */
     .hero {
         padding-top: 80px;
+        min-height: auto;
     }
     
+    .hero-badge {
+        font-size: 0.875rem;
+        padding: var(--spacing-sm) var(--spacing-lg);
+    }
+    
+    /* Phone mockups */
     .phone-frame {
         width: 240px;
         height: 500px;
+        margin: 0 auto;
     }
     
+    /* Ask Doctor card - Stack on mobile */
     .ask-doctor-card {
         grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
     }
     
+    .chat-bubble {
+        padding: var(--spacing-md);
+    }
+    
+    /* AI Features */
     .ai-features {
         grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
     }
     
+    .ai-feature-item {
+        padding: var(--spacing-lg);
+    }
+    
+    /* Features grid - Single column */
     .features-grid {
         grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
     }
     
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+    
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    /* Trust badges */
     .trust-badges {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
     
+    .trust-badge {
+        padding: var(--spacing-lg);
+    }
+    
+    /* Footer adjustments */
     .footer-grid {
         grid-template-columns: 1fr;
         text-align: center;
+        gap: var(--spacing-xl);
     }
     
     .footer-brand {
         grid-column: span 1;
     }
     
+    .footer-links {
+        gap: var(--spacing-sm);
+    }
+    
+    .footer-links a {
+        padding: var(--spacing-sm) 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
     .footer-social {
         justify-content: center;
+        gap: var(--spacing-md);
+    }
+    
+    .social-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.25rem;
     }
     
     .footer-bottom-content {
         flex-direction: column;
         text-align: center;
+        gap: var(--spacing-md);
     }
     
+    .footer-links-bottom {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    /* Steps/How It Works section */
     .steps-wrapper {
         flex-direction: column;
         align-items: center;
-        gap: var(--spacing-lg);
+        gap: var(--spacing-xl);
     }
     
     .step-connector {
         padding-top: 0;
         transform: rotate(90deg);
+        width: 40px;
+        height: 40px;
     }
     
     .step-item {
         flex: none;
         max-width: 100%;
+        width: 100%;
+        text-align: center;
     }
     
+    .step-number {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .step-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
+    }
+    
+    /* Health Hub tabs - Icon only on mobile */
     .health-hub-tabs {
         gap: var(--spacing-xs);
+        flex-wrap: wrap;
+        justify-content: center;
     }
     
     .hub-tab span {
@@ -2840,16 +3032,16 @@ input, textarea {
     
     .hub-tab {
         padding: var(--spacing-md);
+        min-width: 44px;
+        min-height: 44px;
     }
     
     .hub-tab i {
         font-size: 1.25rem;
+        margin: 0;
     }
     
-    .trust-badges {
-        grid-template-columns: 1fr;
-    }
-    
+    /* Carousel buttons positioning */
     .carousel-prev {
         left: 0;
     }
@@ -2857,21 +3049,73 @@ input, textarea {
     .carousel-next {
         right: 0;
     }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    /* Section badges */
+    .section-badge {
+        font-size: 0.8125rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    /* Buttons general mobile improvements */
+    .btn {
+        font-size: 0.9375rem;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    /* Cards and panels spacing */
+    .card,
+    .panel,
+    .box {
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
+    }
 }
 
 /* Mobile Portrait */
 @media (max-width: 576px) {
     :root {
-        --spacing-3xl: 3rem;
+        --spacing-3xl: 2.5rem;
+        --spacing-2xl: 2rem;
     }
     
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.75rem; }
+    h1 { 
+        font-size: 2rem !important;
+        line-height: 1.2;
+    }
+    h2 { 
+        font-size: 1.75rem !important;
+        line-height: 1.3;
+    }
+    h3 {
+        font-size: 1.25rem !important;
+    }
+    h4 {
+        font-size: 1.125rem !important;
+    }
+    
+    p {
+        font-size: 0.9375rem;
+        line-height: 1.6;
+    }
     
     .container {
         padding: 0 var(--spacing-md);
     }
     
+    section {
+        padding: var(--spacing-3xl) 0;
+    }
+    
+    .section-header {
+        margin-bottom: var(--spacing-2xl);
+    }
+    
+    /* Preloader adjustments */
     .loader-icon {
         width: 180px;
         height: 180px;
@@ -2879,87 +3123,166 @@ input, textarea {
     
     .loader-bar {
         width: 220px;
+        max-width: 85vw;
+    }
+    
+    .loader {
+        padding: var(--spacing-lg);
+    }
+    
+    /* Hero section adjustments */
+    .hero {
+        min-height: auto;
+        padding: 80px 0 var(--spacing-3xl) 0;
     }
     
     .hero-stats {
         gap: var(--spacing-lg);
+        flex-wrap: wrap;
+    }
+    
+    .stat-item {
+        min-width: 120px;
     }
     
     .stat-number {
         font-size: 1.5rem;
     }
     
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    /* Button improvements - Full width and touch-friendly */
     .hero-buttons {
         flex-direction: column;
         width: 100%;
+        gap: var(--spacing-md);
+    }
+    
+    .btn {
+        min-height: 48px;
+        touch-action: manipulation;
     }
     
     .btn-lg {
         width: 100%;
         justify-content: center;
+        min-height: 52px;
+        padding: var(--spacing-md) var(--spacing-xl);
+        font-size: 1rem;
     }
     
+    .btn i {
+        font-size: 1.25rem;
+    }
+    
+    /* Phone mockups */
     .phone-frame {
         width: 220px;
         height: 460px;
-    }
-    
-    .mode-tabs {
-        flex-direction: column;
-        border-radius: var(--radius-lg);
-    }
-    
-    .mode-tab {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .adolescent-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .ask-doctor-content {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    
-    .supported-languages {
-        justify-content: center;
-    }
-    
-    .download-buttons {
-        flex-direction: column;
-    }
-    
-    .download-btn {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .app-info {
-        flex-direction: column;
-        gap: var(--spacing-md);
+        margin: 0 auto;
     }
     
     .phone-mockup-download {
         width: 220px;
         height: 440px;
+        margin: 0 auto;
     }
     
+    /* Tabs - Mobile optimized */
+    .mode-tabs {
+        flex-direction: column;
+        border-radius: var(--radius-lg);
+        width: 100%;
+    }
+    
+    .mode-tab {
+        width: 100%;
+        justify-content: center;
+        padding: var(--spacing-md);
+        min-height: 48px;
+    }
+    
+    /* Cards and grids */
+    .adolescent-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+    
+    .feature-card {
+        padding: var(--spacing-lg);
+    }
+    
+    .wellness-column {
+        padding: var(--spacing-lg);
+    }
+    
+    /* Ask Doctor / Chat section */
+    .ask-doctor-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: var(--spacing-md);
+    }
+    
+    .chat-bubble {
+        max-width: 100%;
+    }
+    
+    .supported-languages {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+    }
+    
+    /* Download section improvements */
+    .download-buttons {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        width: 100%;
+    }
+    
+    .download-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 56px;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    .download-btn i {
+        font-size: 2rem;
+    }
+    
+    .app-info {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        align-items: center;
+        text-align: center;
+    }
+    
+    .info-item {
+        min-width: auto;
+    }
+    
+    /* Back to top button */
     .back-to-top {
         bottom: 20px;
         right: 20px;
-        width: 45px;
-        height: 45px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
     }
     
+    /* Health Hub adjustments */
     .hub-features-list {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
     }
     
     .hub-panel-inner {
         padding: var(--spacing-lg);
+        gap: var(--spacing-md);
     }
     
     .hub-panel-icon {
@@ -2972,41 +3295,231 @@ input, textarea {
         font-size: 2rem;
     }
     
+    .hub-feature-item {
+        padding: var(--spacing-md);
+    }
+    
+    /* Newsletter form - Stack on mobile */
     .newsletter-input-group {
         flex-direction: column;
+        gap: var(--spacing-md);
+        width: 100%;
+    }
+    
+    .newsletter-input {
+        width: 100%;
+        padding: var(--spacing-md) var(--spacing-lg);
+        min-height: 48px;
+        font-size: 1rem;
     }
     
     .newsletter-btn {
         width: 100%;
         justify-content: center;
+        min-height: 48px;
+        padding: var(--spacing-md);
     }
     
+    /* Wellness/Mental Health grid */
     .wellness-column {
         padding: var(--spacing-lg);
     }
     
+    .wellness-item {
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    /* Testimonials carousel */
     .testimonials-carousel .testimonial-card {
         padding: var(--spacing-lg);
+        margin: 0 var(--spacing-sm);
     }
     
     .testimonials-carousel .testimonial-content p {
+        font-size: 0.9375rem;
+        line-height: 1.6;
+    }
+    
+    .testimonial-author h4 {
         font-size: 1rem;
     }
     
+    .testimonial-rating {
+        font-size: 0.875rem;
+    }
+    
+    /* Carousel navigation buttons - Touch friendly */
     .carousel-btn {
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        touch-action: manipulation;
+    }
+    
+    .carousel-dots {
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md) 0;
+    }
+    
+    .carousel-dot {
+        width: 10px;
+        height: 10px;
+        min-width: 10px;
+        min-height: 10px;
+    }
+    
+    .carousel-dot.active {
+        width: 24px;
+    }
+    
+    /* FAQ accordion */
+    .faq-item {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .faq-question {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 1rem;
+        min-height: 48px;
+    }
+    
+    .faq-answer {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 0.9375rem;
+    }
+    
+    /* Images responsive */
+    .hero-image img,
+    .ai-doctor-image img,
+    .phone-mockup img {
+        max-width: 100%;
+        height: auto;
     }
 }
 
 /* Extra Small Devices */
 @media (max-width: 400px) {
-    .hero-stats {
-        flex-direction: column;
+    :root {
+        --spacing-3xl: 2rem;
+        --spacing-2xl: 1.5rem;
+        --spacing-xl: 1.25rem;
     }
     
+    html {
+        font-size: 15px;
+    }
+    
+    h1 {
+        font-size: 1.75rem !important;
+    }
+    
+    h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+    
+    /* Stack stats vertically */
+    .hero-stats {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .stat-item {
+        width: 100%;
+        padding: var(--spacing-md);
+    }
+    
+    /* Download features single column */
     .download-features {
         grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    
+    /* Smaller preloader */
+    .loader-icon {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .loader-bar {
+        width: 200px;
+    }
+    
+    /* Smaller phone mockups */
+    .phone-frame {
+        width: 200px;
+        height: 420px;
+    }
+    
+    .phone-mockup-download {
+        width: 200px;
+        height: 400px;
+    }
+    
+    /* Adjust button sizes */
+    .btn {
+        font-size: 0.875rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+    
+    .btn-lg {
+        font-size: 0.9375rem;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+    
+    /* Feature icons smaller */
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
+    }
+    
+    /* Section padding reduced */
+    section {
+        padding: var(--spacing-2xl) 0;
+    }
+    
+    .section-header {
+        margin-bottom: var(--spacing-xl);
+    }
+    
+    /* Cards more compact */
+    .card,
+    .panel,
+    .feature-card {
+        padding: var(--spacing-md);
+    }
+    
+    /* Navbar logo smaller */
+    .logo img {
+        max-height: 40px;
+    }
+    
+    /* Mobile menu narrower */
+    .nav-links {
+        width: 85%;
+    }
+    
+    /* Carousel dots smaller */
+    .carousel-dot {
+        width: 8px;
+        height: 8px;
+    }
+    
+    .carousel-dot.active {
+        width: 20px;
+    }
+    
+    /* Back to top smaller */
+    .back-to-top {
+        width: 44px;
+        height: 44px;
+        bottom: 16px;
+        right: 16px;
     }
 }
 
